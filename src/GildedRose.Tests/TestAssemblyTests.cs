@@ -109,6 +109,23 @@ namespace GildedRose.Tests
             Assert.Equal(0, guildedRose.Items.First().Quality);
         }
 
+        [Fact]
+        public void ConjuredItemsDegradeTwiceAsFastAsNormalItems()
+        {
+            var guildedRose = new GuildedRoseManager { Items = new List<Item> { new Item { Name = "Conjured ham", SellIn = 5, Quality = 20 } } };
+            this.RunUpdateQualityXTimes(1, guildedRose);
+            Assert.Equal(18, guildedRose.Items.First().Quality);
+        }
+
+        [Fact]
+        public void ConjuredItemsDegradeTwiceAsFastAsNormalItemsWhenPastSellByDate()
+        {
+            var guildedRose = new GuildedRoseManager { Items = new List<Item> { new Item { Name = "Conjured ham", SellIn = 5, Quality = 20 } } };
+            this.RunUpdateQualityXTimes(5, guildedRose);
+            Assert.Equal(10, guildedRose.Items.First().Quality);
+            this.RunUpdateQualityXTimes(1, guildedRose);
+            Assert.Equal(6, guildedRose.Items.First().Quality);
+        }
 
         private void RunUpdateQualityXTimes(int timesToRun, GuildedRoseManager guildedRoseManager)
         {
